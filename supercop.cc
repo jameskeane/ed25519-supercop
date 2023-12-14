@@ -67,9 +67,30 @@ NAPI_METHOD(node_supercop_create_key_pair) {
   return NULL;
 }
 
+NAPI_METHOD(node_supercop_exchange_keys) {
+  NAPI_ARGV(3)
+  NAPI_ARGV_BUFFER_CAST(unsigned char *, public_key, 0)
+  NAPI_ARGV_BUFFER_CAST(unsigned char *, secret_key, 1)
+  NAPI_ARGV_BUFFER_CAST(unsigned char *, shared_secret, 2)
+
+  if (public_key_len != 32) {
+    napi_throw_error(env, "EINVAL", "public key must be 32 bytes");
+    return NULL;
+  }
+
+  if (secret_key_len != 64) {
+    napi_throw_error(env, "EINVAL", "secret key must be 64 bytes");
+    return NULL;
+  }
+
+  ed25519_key_exchange(shared_secret, public_key, secret_key);
+  return NULL;
+}
+
 NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(node_supercop_sign)
   NAPI_EXPORT_FUNCTION(node_supercop_verify)
   NAPI_EXPORT_FUNCTION(node_supercop_create_seed)
   NAPI_EXPORT_FUNCTION(node_supercop_create_key_pair)
+  NAPI_EXPORT_FUNCTION(node_supercop_exchange_keys)
 }
