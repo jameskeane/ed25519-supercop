@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/substack/ed25519-supercop#readme",
   "devDependencies": {
-    "prebuildify": "^4.0.0",
-    "tape": "^4.2.0"
+    "prebuildify": "^5.0.1",
+    "tape": "^5.7.2"
   }
 }
