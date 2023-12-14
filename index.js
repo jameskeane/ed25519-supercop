@@ -52,3 +52,18 @@ exports.createKeyPair = function (seed) {
   bindings.node_supercop_create_key_pair(seed, res.publicKey, res.secretKey)
   return res
 }
+
+exports.exchangeKeys = function (publicKey, secretKey) {
+  if (typeof publicKey === 'string') publicKey = Buffer.from(publicKey, 'hex')
+  else if (!Buffer.isBuffer(publicKey)) {
+    throw new Error('public key must be a buffer or hex string')
+  }
+  if (typeof secretKey === 'string') secretKey = Buffer.from(secretKey, 'hex')
+  else if (!Buffer.isBuffer(secretKey)) {
+    throw new Error('secret key must be a buffer or hex string')
+  }
+
+  const sharedSecret = Buffer.alloc(32);
+  bindings.node_supercop_exchange_keys(publicKey, secretKey, sharedSecret);
+  return sharedSecret;
+}
