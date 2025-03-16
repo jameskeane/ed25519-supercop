@@ -2,10 +2,13 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - master
 name: Build binaries and create release
 jobs:
   build:
     strategy:
+      max-parallel: 3
       matrix:
         os: [windows-latest, macos-latest, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
@@ -18,8 +21,6 @@ jobs:
       - run: npm run vendor
       - run: npm install
       - run: npm run prebuild
-      # - run: npm run prebuild-ia32
-      #   if: ${{ matrix.os == 'windows-latest' }}
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}
@@ -50,35 +51,15 @@ jobs:
         run: echo "VERSION=$(git describe --tags)" >> $GITHUB_OUTPUT
       - name: Compress builds
         run: |
-          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-windows-x64.tar" --directory "prebuilds/windows-latest" .
-          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x64.tar" --directory "prebuilds/ubuntu-24.04" .
-          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-osx-arm64.tar" --directory "prebuilds/macos-latest" .
-      - name: Upload x64 build
+          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-prebuilds.tar" --directory "prebuilds/" .
+      - name: Upload prebuilds
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.get_version.outputs.VERSION }}-linux-x64.tar
-          asset_name: ${{ steps.get_version.outputs.VERSION }}-linux-x64.tar
-          asset_content_type: application/x-tar
-      - name: Upload windows build
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.get_version.outputs.VERSION }}-windows-x64.tar
-          asset_name: ${{ steps.get_version.outputs.VERSION }}-windows-x64.tar
-          asset_content_type: application/x-tar
-      - name: Upload osx build
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.get_version.outputs.VERSION }}-osx-arm64.tar
-          asset_name: ${{ steps.get_version.outputs.VERSION }}-osx-arm64.tar
+          asset_path: ./${{ steps.get_version.outputs.VERSION }}-prebuilds.tar
+          asset_name: ${{ steps.get_version.outputs.VERSION }}-prebuilds.tar
           asset_content_type: application/x-tar
       #- uses: JS-DevTools/npm-publish@v1
       #  with:
