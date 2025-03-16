@@ -1,6 +1,6 @@
 {
-  "name": "ed25519-supercop",
-  "version": "2.1.0",
+  "name": "@pulseapp/ed25519-supercop",
+  "version": "2.1.1",
   "description": "ed25519 curve operations using a supercop/ref10 implementation",
   "main": "index.js",
   "gypfile": true,
@@ -13,12 +13,14 @@
     "rebuild": "node-gyp rebuild",
     "test": "tape test/*.js",
     "prebuild": "prebuildify --napi --strip",
-    "prebuild-ia32": "prebuildify --napi --strip --arch=ia32",
     "install": "node-gyp-build"
+  },
+  "binary": {
+    "napi_versions": [3]
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/substack/ed25519-supercop.git"
+    "url": "https://github.com/jameskeane/ed25519-supercop.git"
   },
   "keywords": [
     "ed25519",
@@ -28,12 +30,12 @@
     "elliptic",
     "curve"
   ],
-  "author": "substack",
+  "author": "jameskeane",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/substack/ed25519-supercop/issues"
+    "url": "https://github.com/jameskeane/ed25519-supercop/issues"
   },
-  "homepage": "https://github.com/substack/ed25519-supercop#readme",
+  "homepage": "https://github.com/jameskeane/ed25519-supercop",
   "devDependencies": {
     "prebuildify": "^6.0.1",
     "tape": "^5.9.0"
