@@ -1,5 +1,5 @@
 #include <node_api.h>
-#include "vendor/ed25519/src/ed25519.h"
+#include "vendor/ed25519/ed25519.h"
 #include <napi-macros.h>
 
 NAPI_METHOD(node_supercop_sign) {

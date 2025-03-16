@@ -9,7 +9,6 @@
     "node-gyp-build": "^4.8.4"
   },
   "scripts": {
-    "vendor": "git clone https://github.com/orlp/ed25519 vendor/ed25519",
     "rebuild": "node-gyp rebuild",
     "test": "tape test/*.js",
     "prebuild": "prebuildify --napi --strip",
