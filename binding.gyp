@@ -15,7 +15,10 @@
         "vendor/ed25519/src/sign.c",
         "vendor/ed25519/src/verify.c"
       ],
-      "include_dirs": ["<!(node -e \"require('napi-macros')\")"]
+      "include_dirs": ["<!(node -e \"require('napi-macros')\")"],
+      "defines": [
+        "NAPI_VERSION=<(napi_build_version)"
+      ]
     }
   ]
 }
